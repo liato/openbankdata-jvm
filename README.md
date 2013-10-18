@@ -27,7 +27,7 @@ The following example prints all transactions associated with the given account.
 ````java
 BankClient client = new HandelsbankenBankClient("username","password");
 AccountService accountService = new HandelsBankenAccountService(client);
-TransactionService transactionService new HandelsbankenTransactionService(client);
+TransactionService transactionService = new HandelsbankenTransactionService(client);
 
 List<Account> accounts = accountService.getAccounts();
 if(!accounts.isEmpty()) {
