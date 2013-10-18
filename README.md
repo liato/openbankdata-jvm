@@ -33,7 +33,7 @@ List<Account> accounts = accountService.getAccounts();
 if(!accounts.isEmpty()) {
     Account account = accounts.get(0);
     for(Transaction transaction : transactionService.getTransactions(account)) {
-      System.out.println(transaction.getDescription() +" - "+ transaction.getAmount());
+      System.out.println(transaction.getDescription() +" : "+ transaction.getAmount());
     }
 }
 ````
