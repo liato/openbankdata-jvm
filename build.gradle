@@ -1,0 +1,56 @@
+apply plugin: 'java'
+apply from: 'eclipse.gradle'
+
+version = '0.1-SNAPSHOT'
+
+ext {
+	jsoupVersion = '1.7.3'
+	jacksonVersion = '2.1.2'
+}
+
+subprojects {
+    apply plugin: 'java'
+  	apply plugin: 'checkstyle'
+
+	sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+    group = 'org.openbankdata'
+    
+    repositories {
+       mavenCentral()
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.11'
+        testCompile 'org.easymock:easymock:3.1'
+        compile 'com.github.kevinsawicki:http-request:5.6'
+    }
+
+
+	checkstyleMain {
+		configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
+	}
+}
+
+
+
+subprojects.each { subproject -> evaluationDependsOn(subproject.path) }
+
+task allJar( type: Jar, dependsOn: subprojects.build ) {
+    baseName = 'openbankdata-all'
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
+}
+
+artifacts {
+    archives allJar
+}
+
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}

@@ -1,0 +1,27 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+subprojects {
+	 apply plugin: 'eclipse'
+
+	 task configureEclipseCheckstyle(type: Copy) {
+		from "${rootProject.projectDir}/config/checkstyle"
+		into "${projectDir}"
+		include 'eclipse-checkstyle.xml'
+		rename('eclipse-checkstyle.xml','.checkstyle')
+		filter(ReplaceTokens, tokens: [rootProjectDir: rootProject.projectDir.path])
+	}
+	task cleanEclipseSettings(type: Delete) {
+	  delete "${project.projectDir}/.checkstyle"
+	}
+	eclipse {
+		project {
+   			natures 'org.springsource.ide.eclipse.gradle.core.nature',
+   					'net.sf.eclipsecs.core.CheckstyleNature'
+   			
+   			buildCommand 'org.eclipse.jdt.core.javabuilder'
+   			buildCommand 'net.sf.eclipsecs.core.CheckstyleBuilder'
+		}	
+	}
+	tasks.eclipse.dependsOn(configureEclipseCheckstyle)
+  	tasks.cleanEclipse.dependsOn(cleanEclipseSettings)
+}
