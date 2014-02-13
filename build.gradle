@@ -27,7 +27,7 @@ subprojects {
     }
 
 
-	checkstyleMain {
+	checkstyle {
 		configFile = file("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
 	}
 }
