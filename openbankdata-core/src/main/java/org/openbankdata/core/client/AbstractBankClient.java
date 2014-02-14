@@ -36,6 +36,7 @@ public abstract class AbstractBankClient implements BankClient {
         return configureConnection(vHttpRequest);
     }
 
+    @Override
     public BankResponse post(BankRequest pBankRequest) {
         if (!isSessionActive()) {
             getCache().clear();
@@ -50,11 +51,12 @@ public abstract class AbstractBankClient implements BankClient {
         HttpRequest request = createConnection(pBankRequest.getUri(), HttpRequest.METHOD_POST);
         request.form(pBankRequest.getParams());
         request.code();
-        BankResponse response = new BankResponse(request);
+        BankResponse response = new HttpRequestBankResponse(request);
         getCache().put(pBankRequest, response);
         return response;
     }
 
+    @Override
     public BankResponse get(BankRequest pBankRequest) {
         if (!isSessionActive()) {
             setActiveSession(activateSession());
@@ -67,15 +69,17 @@ public abstract class AbstractBankClient implements BankClient {
         }
         HttpRequest request = createConnection(pBankRequest.generateUri(), HttpRequest.METHOD_GET);
         request.code();
-        BankResponse response = new BankResponse(request);
+        BankResponse response = new HttpRequestBankResponse(request);
         getCache().put(pBankRequest, response);
         return response;
     }
 
+    @Override
     public Cache getCache() {
         return mCache;
     }
 
+    @Override
     public void clearCache() {
         mCache.clear();
     }
