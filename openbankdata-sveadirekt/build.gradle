@@ -1,4 +1,5 @@
 dependencies {
 	compile project(':openbankdata-core')
+	testCompile project(path: ':openbankdata-core', configuration: 'tests')
 	compile("org.jsoup:jsoup:${jsoupVersion}")
 }

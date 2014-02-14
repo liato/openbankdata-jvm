@@ -2,7 +2,6 @@ package org.openbankdata.bank.sveadirekt.service;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -10,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -76,11 +76,7 @@ public class SveaDirektTransactionService extends AbstractBankService implements
             }
             vTransaction.setCurrency(Currency.getInstance("SEK"));
 
-            try {
-                vTransaction.setTransactionDate(DATE_FORMATTER.parse(vTransactionElement.first().text()));
-            } catch (ParseException e) {
-                // Ignore Exception
-            }
+            vTransaction.setTransactionDate(new DateTime(vTransactionElement.first().text()));
             vTransactions.add(vTransaction);
         }
         return vTransactions;

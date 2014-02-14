@@ -22,7 +22,7 @@ import org.openbankdata.core.service.AbstractBankService;
 import org.openbankdata.core.service.AccountService;
 
 public class SveaDirektAccountService extends AbstractBankService implements
-        AccountService {
+AccountService {
 
     private SveaDirektTransactionService mTransactionService;
 
@@ -52,15 +52,14 @@ public class SveaDirektAccountService extends AbstractBankService implements
 
             getBankClient().getCache().put(mTransactionService.createTransactionRequest(firstAccount), response);
         }
-        if (accounts.size() > 1) {
-            for (Account account : accounts) {
-                // Fetch remaining transaction pages and fetch details
-                String transactionResponse = mTransactionService
-                        .fetchTransactionData(account).getBody();
-                addAccountDetails(account, Jsoup.parse(transactionResponse));
-            }
-        }
 
+        // Fetch additional accounts transaction pages to get their balance.
+        for (int i = 1; i < accounts.size(); i++) {
+            Account account = accounts.get(i);
+            String transactionResponse = mTransactionService
+                    .fetchTransactionData(account).getBody();
+            addAccountDetails(account, Jsoup.parse(transactionResponse));
+        }
         return accounts;
     }
 
@@ -96,7 +95,9 @@ public class SveaDirektAccountService extends AbstractBankService implements
         String vBalance = vAccountDetails.last().text();
         pAccount.setName(vAccountType);
         pAccount.setCurrency(Currency.getInstance("SEK"));
-        pAccount.setBalance(new BigDecimal(vBalance.replaceAll("[^\\d]", "")));
+        BigDecimal balance = new BigDecimal(vBalance.replaceAll("[^\\d]", ""));
+        pAccount.setBalance(balance);
+        pAccount.setAvailable(balance);
         pAccount.setAccountType(mapAccountType(vAccountType));
         return pAccount;
     }

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<!--[if lt IE 8]> <html class="no-js ie ie7 private" lang="sv"> <![endif]-->
+<!--[if IE 8]> <html class="no-js ie ie8 gtie7 private" lang="sv"> <![endif]-->
+<!--[if gte IE 9]> <html class="no-js ie ie9 gtie7 private" lang="sv"> <![endif]-->
+<!--[if !IE]><!-->
+<html class="no-js no-ie private" lang="sv">
+<!--<![endif]-->
+<head>
+
+<meta charset="iso-8859-1" />
+
+<meta name="HandheldFriendly" content="True" />
+<meta name="MobileOptimized" content="320" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="cleartype" content="on" />
+<meta name="format-detection" content="telephone=no" />
+
+
+
+
+<script>
+	var SVEA = SVEA || {};
+	SVEA.resources = {
+		build : '1121261030'
+	};
+	SVEA.currentLang = 'sv';
+</script>
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="/js/svea-head.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/svea-style.css" />
+<!--<![endif]-->
+
+<!--[if (lte IE 8)]>
+<script src="/js/svea-head-ie.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/svea-style-ie.css" />
+<![endif]-->
+
+<script src='/js/curlconf.js' type='text/javascript'></script>
+<script src='/js/curl-0.7.4/curl.js' type='text/javascript'></script>
+
+<script>
+	var site = location.pathname.match(/bowie/) ? 'backoffice' : 'customer';
+	curl([ 'domReady!' ], function() {
+	})
+			.next(
+					[ 'i18n!' + site + '/i18n/login', 'underscore', 'jquery' ],
+					function(texts, _, $) {
+						$('#message').text(texts.message);
+						texts.instructions($('#instructions'));
+						$('#username-label').html(texts.username);
+						$('#password-label').text(texts.password);
+						texts.errorFailedToLogin($('#error-failed-to-login'));
+
+						$('#username').attr('maxlength',
+								texts.maxlengthUserName).focus();
+
+						$
+								.ajax({
+									url : '/service/settings/list',
+									cache : false,
+									dataType : "json",
+									success : function(settings) {
+										function signicat(method, text) {
+											var targetUrl = window.location.href;
+
+											var indexOfQueryString = targetUrl
+													.indexOf("?");
+											if (indexOfQueryString > 0) {
+												targetUrl = targetUrl
+														.substring(0,
+																indexOfQueryString);
+											}
+
+											var security = (targetUrl
+													.indexOf("/j_security_check") < 0 ? "/j_security_check"
+													: "");
+											return $('<p />')
+													.append(
+															$('<p />', {
+																'class' : 'btn'
+															})
+																	.append(
+																			$(
+																					'<a />',
+																					{
+																						'class' : "action",
+																						href : settings[0].signicatUrl
+																								+ "?id="
+																								+ method
+																								+ "::&target="
+																								+ targetUrl
+																								+ security
+																					})
+																					.text(
+																							text)))
+										}
+
+										$('#normal-login').text(texts.login);
+										$('#eleg-login').text(texts.elegLogin);
+										$('#login-button').text(
+												texts.loginButton);
+
+										if (texts.eleg
+												&& texts.eleg.length == 0) {
+											$('#eleg-login').hide();
+										}
+										var elegs = $('#eleg');
+										_.each(texts.eleg, function(item) {
+											elegs.append(signicat(item.name,
+													item.text));
+										});
+									}
+								});
+					});
+
+	function uppercaseUser() {
+		$('#username').each(function() {
+			this.value = this.value && this.value.toUpperCase();
+		});
+	}
+</script>
+
+<title>Logga in</title>
+</head>
+<body id="top" class="start">
+	<div class="wrapper-outer">
+		<div class="wrapper">
+			<header id="header">
+				<div id="logo">
+					<a href="http://www.svea.com/sv/swe/"> <img
+						src="/assets/logo.png" alt="Svea Ekonomi" />
+					</a>
+				</div>
+			</header>
+			<div class="grid-container">
+				<div class="grid-content-wrapper container">
+					<div class="grid-content">
+						<article class="bd" id="main" role="main">
+							<h1 id='message'></h1>
+							<div id='instructions'></div>
+						</article>
+					</div>
+				</div>
+				<div id="nav-secondary" class="grid-nav-secondary">
+					<div class="bd bd-wrapper">
+						<h2 id='normal-login'>Användarnamn</h2>
+						<div class="form">
+							<form method="post" action="j_security_check"
+								enctype="application/x-www-form-urlencoded"
+								onsubmit="uppercaseUser()">
+								<fieldset>
+									<div class="input-item">
+										<label id="username-label" for="username">
+											(10&nbsp;siffror)</label> <input id="username" class="span2"
+											name="j_username" type="text">
+									</div>
+									<div class="input-item">
+										<label id="password-label" for="password"></label> <input
+											id="password" class="span2" name="j_password" type="password">
+									</div>
+									<p></p>
+									<button id="login-button" class="btn action"
+										name="login-button" type="submit">Logga in</button>
+									<div class="errors">
+										<span class='error'> <span id='error-failed-to-login'
+											style='display: block'> </span></span>
+
+									</div>
+								</fieldset>
+							</form>
+						</div>
+						<p>&nbsp;</p>
+						<h2 id='eleg-login'>E-legitimation</h2>
+						<div id="eleg"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer id="footer">
+			<div class="bd">
+				<div class="container">
+					<div class="about">
+						<ul class="flags container">
+							<li title="SveaDirekt, Sverige"><a class="flag se"
+								href="http://www.sveadirekt.com/sv/swe/">SveaDirekt, Sverige</a></li>
+
+							<li title="Svea Direkt, Finland"><a class="flag fi"
+								href="http://www.sveadirekt.com/fi/fin/">Svea Direkt,
+									Finland</a></li>
+
+							<li title="Svea Direkte, Norge"><a class="flag no"
+								href="http://www.sveadirekt.com/no/nor/">Svea Direkte, Norge</a></li>
+						</ul>
+					</div>
+					<div class="address"></div>
+				</div>
+			</div>
+		</footer>
+		<script async="async" src="/js/svea-main.js"></script>
+	</div>
+	<div id="mq-detect"></div>
+</body>
+</html>
