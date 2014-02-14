@@ -3,6 +3,8 @@ package org.openbankdata.core;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+import org.openbankdata.core.utils.ObjectUtils;
+
 /**
  *
  */
@@ -70,5 +72,35 @@ public class Account {
 
     public void setCurrency(Currency pCurrency) {
         this.mCurrency = pCurrency;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Account other = (Account) obj;
+        return ObjectUtils.equal(this.mId, other.mId)
+                && ObjectUtils.equal(this.mAccountNumber, other.mAccountNumber)
+                && ObjectUtils.equal(this.mAccountType, other.mAccountType)
+                && ObjectUtils.equal(this.mAvailable, other.mAvailable)
+                && ObjectUtils.equal(this.mBalance, other.mBalance)
+                && ObjectUtils.equal(this.mCurrency, other.mCurrency)
+                && ObjectUtils.equal(this.mName, other.mName);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return ObjectUtils.hashCode(this.mAccountNumber,
+                this.mId,
+                this.mAccountType,
+                this.mAvailable,
+                this.mBalance,
+                this.mCurrency,
+                this.mName);
     }
 }

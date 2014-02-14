@@ -55,4 +55,30 @@ public class Transaction {
     public boolean isPending() {
         return mPending;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Transaction other = (Transaction) obj;
+        return ObjectUtils.equal(this.mAmount, other.mAmount)
+                && ObjectUtils.equal(this.mCurrency, other.mCurrency)
+                && ObjectUtils.equal(this.mDescription, other.mDescription)
+                && ObjectUtils.equal(this.mPending, other.mPending)
+                && ObjectUtils.equal(this.mTransactionDate, other.mTransactionDate);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return ObjectUtils.hashCode(this.mAmount,
+                this.mCurrency,
+                this.mDescription,
+                this.mPending,
+                this.mTransactionDate);
+    }
 }
