@@ -15,6 +15,10 @@ subprojects {
 	sourceCompatibility = 1.6
     targetCompatibility = 1.6
     group = 'org.openbankdata'
+
+    tasks.withType(Compile) {
+        options.encoding = 'UTF-8'
+    }
     
     repositories {
        mavenCentral()
@@ -22,8 +26,9 @@ subprojects {
 
     dependencies {
         testCompile 'junit:junit:4.11'
-        testCompile 'org.easymock:easymock:3.1'
+        testCompile 'org.easymock:easymock:3.2'
         compile 'com.github.kevinsawicki:http-request:5.6'
+        compile 'joda-time:joda-time:2.3'
     }
 
 
