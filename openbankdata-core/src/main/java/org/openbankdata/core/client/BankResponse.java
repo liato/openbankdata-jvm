@@ -1,26 +1,8 @@
 package org.openbankdata.core.client;
 
-import com.github.kevinsawicki.http.HttpRequest;
+public interface BankResponse {
 
-public class BankResponse {
+    int code();
 
-    private HttpRequest mResponse;
-
-    private String mBody;
-
-    public BankResponse(HttpRequest pResponse) {
-        mResponse = pResponse;
-    }
-
-    public String getBody() {
-        if (mResponse != null && mBody == null) {
-            mBody = mResponse.body();
-        }
-        return mBody;
-    }
-
-    public int code() {
-        return mResponse.code();
-    }
-
+    String getBody();
 }
