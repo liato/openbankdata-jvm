@@ -74,7 +74,7 @@ public class BankRequest {
             params.putAll(mParams);
             for (Entry<String, String> entry : params.entrySet()) {
                 uriBuilder.append(entry.getKey()).append("=")
-                        .append(entry.getValue()).append("&");
+                .append(entry.getValue()).append("&");
             }
         }
         String uri = uriBuilder.toString();
@@ -96,7 +96,7 @@ public class BankRequest {
 
     @Override
     public int hashCode() {
-        return ObjectUtils.hashCode(getUri(), getParams());
+        return ObjectUtils.hashCode(this.generateUri());
     }
 
 }
