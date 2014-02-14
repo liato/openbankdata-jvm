@@ -2,21 +2,23 @@ package org.openbankdata.core;
 
 import java.math.BigDecimal;
 import java.util.Currency;
-import java.util.Date;
+
+import org.joda.time.DateTime;
+import org.openbankdata.core.utils.ObjectUtils;
 
 public class Transaction {
 
-    private Date mTransactionDate;
+    private DateTime mTransactionDate;
     private String mDescription;
     private BigDecimal mAmount;
     private Currency mCurrency;
     private boolean mPending;
 
-    public Date getTransactionDate() {
+    public DateTime getTransactionDate() {
         return mTransactionDate;
     }
 
-    public void setTransactionDate(Date pTransactionDate) {
+    public void setTransactionDate(DateTime pTransactionDate) {
         this.mTransactionDate = pTransactionDate;
     }
 
