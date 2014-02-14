@@ -1,6 +1,9 @@
 openbankdata-jvm
 ================
 
+##Status
+[![Build Status](https://drone.io/github.com/openbankdata/openbankdata-jvm/status.png)](https://drone.io/github.com/openbankdata/openbankdata-jvm/latest)
+
 ##Examples
 
 ###Authenticating
